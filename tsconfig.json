@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "module": "commonjs",
+    "target": "ES6",
     "noImplicitAny": true,
     "sourceMap": true,
+    "esModuleInterop": true,
     "outDir": "dist",
+    "jsx": "react",
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"]
     }
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
