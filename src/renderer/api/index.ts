@@ -23,3 +23,7 @@ export function sellProduct(data: any) {
 export function searchProducts(searchStr: string) {
   return ipcRenderer.invoke('database-searchProduct', searchStr);
 }
+
+export function getOrders(filters?: { startDate?: Date; endDate?: Date }) {
+  return ipcRenderer.invoke('database-getOrders', filters);
+}

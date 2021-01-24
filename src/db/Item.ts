@@ -31,6 +31,6 @@ export class Item {
   @UpdateDateColumn()
   updatedAt: string;
 
-  @OneToMany(() => Order, (order) => order.item, { onDelete: 'CASCADE' })
+  @OneToMany(() => Order, (order) => order.item)
   orders: Order[];
 }

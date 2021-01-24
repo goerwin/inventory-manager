@@ -13,6 +13,7 @@ import styles from './App.module.css';
 import { useForm } from 'react-hook-form';
 import SellProductModal from './SellProductModal';
 import NumberFormat from 'react-number-format';
+import OrdersModal from './OrdersModal';
 
 export default function App() {
   const [formProduct, setFormProduct] = useState(null);
@@ -183,6 +184,8 @@ export default function App() {
         onSubmit={handleSellProduct}
         onRequestClose={() => setProductToSell(null)}
       />
+
+      <OrdersModal onRequestClose={() => {}} />
     </div>
   );
 }

@@ -1,7 +1,22 @@
-import { createConnection, Like } from 'typeorm';
+import {
+  Between,
+  createConnection,
+  LessThan,
+  Like,
+  MoreThanOrEqual,
+  Raw,
+} from 'typeorm';
 import { Item } from './Item';
 import { Order } from './Order';
 import { ipcMain } from 'electron';
+
+function parseDateForSql(date: Date) {
+  // YYYY-MM-DD hh:mm:ss
+  return date
+    .toISOString()
+    .replace('T', ' ')
+    .replace(/\.\d+Z$/, '');
+}
 
 const connectionPromise = createConnection({
   type: 'sqlite',
@@ -61,4 +76,36 @@ ipcMain.handle('database-searchProduct', async (_, searchStr) => {
   return repository.find({
     where: [{ name: Like(newSearchStr) }, { description: Like(newSearchStr) }],
   });
+});
+
+ipcMain.handle('database-getOrders', async (_, filters) => {
+  const connection = await connectionPromise;
+  const orderRepository = await connection.getRepository(Order);
+  const { startDate, endDate } = filters || {};
+  const conditions =
+    startDate &&
+    endDate &&
+    'order.createdAt >= :startDate AND order.createdAt < :endDate';
+  const parameters = {
+    startDate: startDate && parseDateForSql(startDate),
+    endDate: endDate && parseDateForSql(endDate),
+  };
+
+  console.log(conditions, parameters);
+
+  const totalPriceRes = await orderRepository
+    .createQueryBuilder('order')
+    .select('SUM(order.unitPrice * order.quantity)', 'totalPrice')
+    .where(conditions)
+    .setParameters(parameters)
+    .getRawOne();
+
+  const orders = await orderRepository
+    .createQueryBuilder('order')
+    .leftJoinAndSelect('order.item', 'item')
+    .where(conditions)
+    .setParameters(parameters)
+    .getMany();
+
+  return { totalPrice: totalPriceRes.totalPrice, orders };
 });
