@@ -10,7 +10,9 @@
   align-items: center;
   padding: 20px;
 
-  .topNavAddBtn {
+  .topNavBtns {
+    display: flex;
+    gap: 10px;
     margin-left: auto;
   }
 
@@ -35,29 +37,7 @@
   overflow: auto;
 
   .table {
-    background-color: white;
-    border-collapse: collapse;
-    color: black;
     min-width: 800px;
-    width: 100%;
-
-    th {
-      user-select: none;
-    }
-
-    th,
-    td {
-      padding: 5px;
-      border: 1px solid #000;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    tr:nth-child(2n) {
-      td {
-        background-color: #eee;
-      }
-    }
 
     .tableActionBtns {
       display: flex;

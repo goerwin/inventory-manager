@@ -19,6 +19,7 @@ export default function App() {
   const [formProduct, setFormProduct] = useState(null);
   const [items, setItems] = useState<any[]>([]);
   const [productToSell, setProductToSell] = useState(null);
+  const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false);
   const { register, handleSubmit } = useForm();
 
   const handleSetItems = async () => {
@@ -59,8 +60,6 @@ export default function App() {
       { Header: 'Descripción', accessor: 'description' },
       { Header: 'Precio', accessor: 'price', id: 'price' },
       { Header: 'Unidades disponibles', accessor: 'availableUnits' },
-      { Header: 'Vendidos hoy' },
-      { Header: 'Vendidos total' },
       {
         Header: 'Acciones',
         Cell: ({ row }: any) => {
@@ -70,19 +69,20 @@ export default function App() {
                 title="Editar"
                 onClick={() => setFormProduct(row.original)}
               >
-                ✏️
+                ✎
               </button>
               <button
                 title="Vender"
+                style={{ backgroundColor: 'green', minWidth: 40 }}
                 onClick={() => setProductToSell(row.original)}
               >
-                💰
+                $
               </button>
               <button
                 title="Eliminar"
                 onClick={() => handleDeleteItem(row.original)}
               >
-                🗑️
+                ✗
               </button>
             </div>
           );
@@ -102,7 +102,7 @@ export default function App() {
     prepareRow,
   } = useTable(
     { columns, data, initialState: { sortBy: [{ id: 'name', desc: false }] } },
-    useSortBy
+    useSortBy // TODO: Sorting should be done serverside
   );
 
   return (
@@ -118,12 +118,10 @@ export default function App() {
           <button>Buscar</button>
         </form>
 
-        <button
-          className={styles.topNavAddBtn}
-          onClick={() => setFormProduct({})}
-        >
-          Agregar producto
-        </button>
+        <div className={styles.topNavBtns}>
+          <button onClick={() => setFormProduct({})}>Agregar producto</button>
+          <button onClick={() => setIsOrdersModalOpen(true)}>Ver ventas</button>
+        </div>
       </div>
 
       <div className={styles.tableContainer}>
@@ -137,8 +135,8 @@ export default function App() {
                     <span>
                       {column.isSorted
                         ? column.isSortedDesc
-                          ? ' 🔽'
-                          : ' 🔼'
+                          ? ' ˅'
+                          : ' ˄'
                         : ''}
                     </span>
                   </th>
@@ -185,7 +183,10 @@ export default function App() {
         onRequestClose={() => setProductToSell(null)}
       />
 
-      <OrdersModal onRequestClose={() => {}} />
+      <OrdersModal
+        isOpen={isOrdersModalOpen}
+        onRequestClose={() => setIsOrdersModalOpen(false)}
+      />
     </div>
   );
 }

@@ -1,14 +1,8 @@
-import {
-  Between,
-  createConnection,
-  LessThan,
-  Like,
-  MoreThanOrEqual,
-  Raw,
-} from 'typeorm';
+import { ipcMain } from 'electron';
+import { createConnection, Like } from 'typeorm';
+import { DATABASE_PATH } from '../config';
 import { Item } from './Item';
 import { Order } from './Order';
-import { ipcMain } from 'electron';
 
 function parseDateForSql(date: Date) {
   // YYYY-MM-DD hh:mm:ss
@@ -20,7 +14,7 @@ function parseDateForSql(date: Date) {
 
 const connectionPromise = createConnection({
   type: 'sqlite',
-  database: 'database',
+  database: DATABASE_PATH,
   entities: [Item, Order],
   synchronize: true,
 });
@@ -91,8 +85,6 @@ ipcMain.handle('database-getOrders', async (_, filters) => {
     endDate: endDate && parseDateForSql(endDate),
   };
 
-  console.log(conditions, parameters);
-
   const totalPriceRes = await orderRepository
     .createQueryBuilder('order')
     .select('SUM(order.unitPrice * order.quantity)', 'totalPrice')
@@ -104,6 +96,7 @@ ipcMain.handle('database-getOrders', async (_, filters) => {
     .createQueryBuilder('order')
     .leftJoinAndSelect('order.item', 'item')
     .where(conditions)
+    .limit(100) // TODO: implement pagination
     .setParameters(parameters)
     .getMany();
 

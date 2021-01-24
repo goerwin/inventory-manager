@@ -7,7 +7,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "outDir": "dist",
+    "outDir": "distMain",
     "jsx": "react",
     "baseUrl": ".",
     "paths": {

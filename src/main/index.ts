@@ -1,42 +1,29 @@
-import 'reflect-metadata';
-import { app, BrowserWindow, ipcMain } from 'electron';
-import url from 'url';
-import path from 'path';
-import '../db';
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+process.env.PORT = process.env.PORT || String(3000);
+console.log('ENVIRONMENT:', process.env.NODE_ENV);
 
-const isProd = process.env.NODE_ENV === 'production';
+import { app, BrowserWindow } from 'electron';
+import 'reflect-metadata';
+import { INDEX_HTML_PATH, IS_PROD } from './config';
+import './db';
 
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    minWidth: 750,
+    minHeight: 450,
     height: 600,
-    width: 1000,
+    width: 1200,
+    title: 'Inventario',
+    backgroundColor: 'black',
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
     },
   });
 
-  // and load the index.html of the app.
-  let indexHtmlUrl = url.format({
-    protocol: 'http',
-    host: 'localhost:3000',
-    pathname: 'index.html',
-  });
+  mainWindow.loadURL(INDEX_HTML_PATH);
 
-  if (isProd) {
-    indexHtmlUrl = url.format({
-      pathname: path.join(__dirname, '../../dist/index.html'),
-      protocol: 'file:',
-      slashes: true,
-    });
-  }
-
-  console.log(indexHtmlUrl);
-  mainWindow.loadURL(indexHtmlUrl);
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (!IS_PROD) mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished

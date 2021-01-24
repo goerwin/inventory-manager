@@ -36,7 +36,7 @@ export default function FormProductModal({
       {...props}
     >
       <button className={styles.modalCloseBtn} onClick={onRequestClose}>
-        ❌
+        X
       </button>
       <h2>{props.product?.id ? 'Editar' : 'Agregar'} producto</h2>
       <form onSubmit={handleSubmit(handleFormSubmit)}>

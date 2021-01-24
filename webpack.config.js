@@ -1,3 +1,6 @@
+process.env.PORT = process.env.PORT || 3000;
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -5,11 +8,11 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 const CompressionPlugin = require('compression-webpack-plugin');
 
-const PORT = process.env.PORT || 3000;
-const environment = process.env.NODE_ENV || 'production';
-const isProd = environment === 'production';
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
-console.log('ENVIRONMENT:', environment);
+const isProd = process.env.NODE_ENV === 'production';
+
+console.log('ENVIRONMENT:', process.env.NODE_ENV);
 
 const distFolder = path.resolve(__dirname, 'dist');
 
@@ -26,6 +29,8 @@ function insertIf(condition, type, element) {
   return null;
 }
 
+console.log(isProd ? '[name].[contenthash].bundle.js' : '[name].bundle.js');
+
 module.exports = {
   mode: isProd ? 'production' : 'development',
   target: 'electron-renderer',
@@ -34,8 +39,9 @@ module.exports = {
   devServer: {
     host: '0.0.0.0',
     historyApiFallback: true,
-    port: PORT,
+    port: process.env.PORT,
     contentBase: distFolder,
+    publicPath: '/',
   },
 
   entry: {
@@ -44,7 +50,7 @@ module.exports = {
 
   output: {
     path: distFolder,
-    publicPath: '/',
+    publicPath: './', // So importing files with file:/ protocol works
     filename: isProd ? '[name].[contenthash].bundle.js' : '[name].bundle.js',
   },
 

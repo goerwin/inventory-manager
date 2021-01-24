@@ -2,13 +2,18 @@
   "name": "inventory-manager",
   "version": "1.0.0",
   "description": "Inventory manager with Electron",
+  "main": "./distMain/main/index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev webpack serve --config ./webpack.config.js",
-    "prod": "cross-env NODE_ENV=production webpack serve --config ./webpack.config.js",
-    "build": "tsc",
-    "watch": "tsc -w",
-    "lint": "eslint -c .eslintrc --ext .ts ./src",
-    "start": "npm run build && electron ./dist/main/index.js",
+    "clean": "shx rm -rf dist && shx rm -rf distMain && shx rm -rf distApps",
+    "renderer-build": "webpack --config ./webpack.config.js",
+    "renderer-build-dev": "cross-env NODE_ENV=dev npm run renderer-build",
+    "renderer-server": "webpack serve --config ./webpack.config.js",
+    "renderer-server-dev": "cross-env NODE_ENV=dev npm run renderer-server",
+    "main-build": "tsc",
+    "main-build-dev": "cross-env NODE_ENV=dev npm run main-build",
+    "start": "npm run main-build && electron ./distMain/main/index.js",
+    "start-dev": "cross-env NODE_ENV=dev npm run start",
+    "app-build": "npm run clean && npm run renderer-build && npm run main-build && electron-builder",
     "postinstall": "electron-builder install-app-deps"
   },
   "author": "Erwin G",
@@ -17,20 +22,29 @@
     "@types/react-dom": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
+    "compression-webpack-plugin": "^7.1.2",
+    "css-loader": "^5.0.1",
     "electron": "^11.2.1",
     "electron-builder": "^22.9.1",
     "eslint": "^7.3.1",
+    "html-webpack-plugin": "^4.5.1",
+    "mini-css-extract-plugin": "^1.3.4",
     "postcss": "^8.2.4",
     "postcss-loader": "^4.2.0",
     "postcss-nested": "^5.0.3",
-    "typescript": "^4.0.0"
+    "shx": "^0.3.3",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.14",
+    "typescript": "^4.0.0",
+    "webfonts-loader": "^7.1.0",
+    "webpack": "^5.17.0",
+    "webpack-bundle-analyzer": "^4.4.0",
+    "webpack-cli": "^4.4.0",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "compression-webpack-plugin": "^7.1.2",
     "cross-env": "^7.0.3",
-    "css-loader": "^5.0.1",
-    "html-webpack-plugin": "^4.5.1",
-    "mini-css-extract-plugin": "^1.3.4",
+    "date-fns": "^2.16.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.14.2",
@@ -39,13 +53,25 @@
     "react-table": "^7.6.3",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^4.0.0",
-    "style-loader": "^2.0.0",
-    "ts-loader": "^8.0.14",
-    "typeorm": "^0.2.30",
-    "webfonts-loader": "^7.1.0",
-    "webpack": "^5.17.0",
-    "webpack-bundle-analyzer": "^4.4.0",
-    "webpack-cli": "^4.4.0",
-    "webpack-dev-server": "^3.11.2"
+    "typeorm": "^0.2.30"
+  },
+  "build": {
+    "appId": "co.erwin.inventory-manager",
+    "productName": "Inventario",
+    "copyright": "Copyright © 2021 ${author}",
+    "directories": {
+      "output": "distApps/${os}/${arch}/${productName}"
+    },
+    "win": {
+      "asar": true,
+      "artifactName": "${productName}.${ext}",
+      "files": [
+        "dist**/*",
+        "distMain/**/*"
+      ],
+      "target": [
+        "portable"
+      ]
+    }
   }
 }
