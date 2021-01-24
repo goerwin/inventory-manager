@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Modal from 'react-modal';
 import styles from './modal.module.css';
+import NumberFormat from 'react-number-format';
 
 export interface Props {
   product: any;
@@ -18,7 +19,12 @@ export default function SellProductModal({
   const { handleSubmit, register, reset, watch } = useForm();
 
   useEffect(() => {
-    reset({ ...props.product, quantity: 1 });
+    reset({
+      ...props.product,
+      id: undefined,
+      itemId: props.product?.id,
+      quantity: 1,
+    });
   }, [props.product]);
 
   const handleFormSubmit = (data: any) => {
@@ -42,9 +48,12 @@ export default function SellProductModal({
       onRequestClose={onRequestClose}
       {...props}
     >
+      <button className={styles.modalCloseBtn} onClick={onRequestClose}>
+        ❌
+      </button>
       <h2>Vender producto</h2>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <input type="hidden" name="id" ref={register} />
+        <input type="hidden" name="itemId" ref={register} />
 
         <label>
           <b>Nombre: </b>
@@ -71,11 +80,18 @@ export default function SellProductModal({
           <input
             type="number"
             name="quantity"
+            autoFocus
             ref={register({ required: true })}
           />
         </label>
         <label>
-          <b>Precio total: </b> <span>{watchPrice * watchQuantity}</span>
+          <b>Precio total: </b>
+          <NumberFormat
+            style={{ fontSize: 36 }}
+            value={watchPrice * watchQuantity}
+            prefix="$"
+            displayType="text"
+          />
         </label>
         <button>Vender</button>
       </form>

@@ -3,9 +3,11 @@
   color: black;
   padding: 20px;
   max-width: 500px;
-  max-height: 450px;
+  max-height: calc(100vh - 40px);
   border-radius: 5px;
   overflow: auto;
+  margin: auto;
+  position: relative;
 
   &Overlay {
     position: fixed;
@@ -13,11 +15,21 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.75);
     padding: 20px;
+    background-color: rgba(0, 0, 0, 0.75);
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &CloseBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    background-color: transparent;
+    padding: 0;
+    cursor: pointer;
   }
 
   form {
@@ -39,6 +51,10 @@
       border-radius: 5px;
       padding: 10px;
       flex-grow: 1;
+    }
+
+    button {
+      float: right;
     }
   }
 

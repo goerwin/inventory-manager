@@ -19,3 +19,7 @@ export function deleteItem(itemId: number) {
 export function sellProduct(data: any) {
   return ipcRenderer.invoke('database-sellProduct', data);
 }
+
+export function searchProducts(searchStr: string) {
+  return ipcRenderer.invoke('database-searchProduct', searchStr);
+}

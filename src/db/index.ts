@@ -1,4 +1,4 @@
-import { createConnection } from 'typeorm';
+import { createConnection, Like } from 'typeorm';
 import { Item } from './Item';
 import { Order } from './Order';
 import { ipcMain } from 'electron';
@@ -52,4 +52,13 @@ ipcMain.handle('database-sellProduct', async (_, data) => {
   await connection.getRepository(Order).save(newOrder);
   item.availableUnits = item.availableUnits - Number(quantity);
   return itemRepository.save(item);
+});
+
+ipcMain.handle('database-searchProduct', async (_, searchStr) => {
+  const connection = await connectionPromise;
+  const repository = await connection.getRepository(Item);
+  const newSearchStr = `%${searchStr}%`;
+  return repository.find({
+    where: [{ name: Like(newSearchStr) }, { description: Like(newSearchStr) }],
+  });
 });

@@ -35,12 +35,20 @@ export default function FormProductModal({
       onRequestClose={onRequestClose}
       {...props}
     >
+      <button className={styles.modalCloseBtn} onClick={onRequestClose}>
+        ❌
+      </button>
       <h2>{props.product?.id ? 'Editar' : 'Agregar'} producto</h2>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <input type="hidden" name="id" ref={register} />
         <label className={styles.smallSize}>
           <b>Nombre: </b>
-          <input type="text" name="name" ref={register({ required: true })} />
+          <input
+            type="text"
+            name="name"
+            autoFocus
+            ref={register({ required: true })}
+          />
         </label>
         <label className={styles.smallSize}>
           <b>Descripción: </b>
