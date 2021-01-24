@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useTable } from 'react-table';
+import { useTable, useSortBy } from 'react-table';
 import {
   addItem,
   deleteItem,
@@ -99,7 +99,10 @@ export default function App() {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data });
+  } = useTable(
+    { columns, data, initialState: { sortBy: [{ id: 'name', desc: false }] } },
+    useSortBy
+  );
 
   return (
     <div className={styles.container}>
@@ -128,8 +131,15 @@ export default function App() {
             {headerGroups.map((headerGroup: any) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column: any) => (
-                  <th {...column.getHeaderProps()}>
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render('Header')}
+                    <span>
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? ' 🔽'
+                          : ' 🔼'
+                        : ''}
+                    </span>
                   </th>
                 ))}
               </tr>

@@ -41,6 +41,10 @@
     min-width: 800px;
     width: 100%;
 
+    th {
+      user-select: none;
+    }
+
     th,
     td {
       padding: 5px;
