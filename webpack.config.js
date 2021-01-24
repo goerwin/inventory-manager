@@ -28,6 +28,7 @@ function insertIf(condition, type, element) {
 
 module.exports = {
   mode: isProd ? 'production' : 'development',
+  target: 'electron-renderer',
   devtool: isProd ? 'source-map' : 'inline-source-map',
 
   devServer: {
@@ -82,6 +83,14 @@ module.exports = {
                 localIdentName: isProd
                   ? '[contenthash:base64]'
                   : '[path][name]_[local]',
+              },
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [['postcss-nested', {}]],
               },
             },
           },

@@ -1,22 +1,8 @@
 import 'reflect-metadata';
-import { app, BrowserWindow } from 'electron';
-import sqlite3 from 'sqlite3';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import url from 'url';
 import path from 'path';
-
-import { createConnection } from 'typeorm';
-import { Item } from '../entities/Item';
-// createConnection({
-//   type: 'sqlite',
-//   database: 'inventory',
-//   entities: [Item],
-//   synchronize: true,
-// })
-//   .then((connection) => {
-//     // here you can start to work with your entities
-//     console.log(connection);
-//   })
-//   .catch((error) => console.log(error));
+import '../db';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -25,7 +11,10 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     height: 600,
     width: 1000,
-    webPreferences: { preload: path.join(__dirname, 'preload.js') },
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+    },
   });
 
   // and load the index.html of the app.

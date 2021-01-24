@@ -1,3 +1,64 @@
 .container {
+  display: grid;
+  height: 100vh;
+  overflow: hidden;
+  grid-template-rows: 100px 1fr;
+}
 
+.topNav {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+
+  .topNavAddBtn {
+    margin-left: auto;
+  }
+
+  form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 370px;
+  }
+
+  input {
+    font-size: 22px;
+    border: 0;
+    border-radius: 6px;
+    padding: 4px 20px;
+    width: 100%;
+  }
+}
+
+.tableContainer {
+  overflow: auto;
+
+  .table {
+    background-color: white;
+    border-collapse: collapse;
+    color: black;
+    min-width: 800px;
+    width: 100%;
+
+    th,
+    td {
+      padding: 5px;
+      border: 1px solid #000;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    tr:nth-child(2n) {
+      td {
+        background-color: #eee;
+      }
+    }
+
+    .tableActionBtns {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
+  }
 }
