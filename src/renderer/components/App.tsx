@@ -66,23 +66,26 @@ export default function App() {
           return (
             <div className={styles.tableActionBtns}>
               <button
+                className="is-icon"
                 title="Editar"
                 onClick={() => setFormProduct(row.original)}
               >
-                ✎
+                <i className="icons icons-pen" />
               </button>
               <button
+                className="is-icon"
                 title="Vender"
                 style={{ backgroundColor: 'green', minWidth: 40 }}
                 onClick={() => setProductToSell(row.original)}
               >
-                $
+                <i className="icons icons-money" />
               </button>
               <button
+                className="is-icon"
                 title="Eliminar"
                 onClick={() => handleDeleteItem(row.original)}
               >
-                ✗
+                <i className="icons icons-delete" />
               </button>
             </div>
           );

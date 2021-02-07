@@ -93,7 +93,7 @@ export default function OrdersModal({
       {...props}
     >
       <button className={styles.modalCloseBtn} onClick={onRequestClose}>
-        X
+        <i className="icons icons-close" />
       </button>
       <h2>Ventas</h2>
       <form>
