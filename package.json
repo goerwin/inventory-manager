@@ -13,7 +13,9 @@
     "main-build-dev": "cross-env NODE_ENV=dev npm run main-build",
     "start": "npm run main-build && electron ./distMain/main/index.js",
     "start-dev": "cross-env NODE_ENV=dev npm run start",
-    "app-build": "npm run clean && npm run renderer-build && npm run main-build && electron-builder",
+    "app-build": "npm run clean && npm run renderer-build && npm run main-build",
+    "app-build-win": "npm run app-build && electron-builder --win --ia32 && electron-builder --win --x64",
+    "postapp-build-win": "shx rm -rf distApps/**/*-unpacked",
     "postinstall": "electron-builder install-app-deps"
   },
   "author": "Erwin G",
@@ -27,7 +29,7 @@
     "electron": "^11.2.1",
     "electron-builder": "^22.9.1",
     "eslint": "^7.3.1",
-    "html-webpack-plugin": "^4.5.1",
+    "html-webpack-plugin": "^5.0.0",
     "mini-css-extract-plugin": "^1.3.4",
     "postcss": "^8.2.4",
     "postcss-loader": "^4.2.0",
@@ -60,7 +62,7 @@
     "productName": "Inventario",
     "copyright": "Copyright © 2021 ${author}",
     "directories": {
-      "output": "distApps/${os}/${arch}/${productName}"
+      "output": "distApps/${os}_${productName}_${arch}"
     },
     "win": {
       "asar": true,
