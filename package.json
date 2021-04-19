@@ -14,7 +14,7 @@
     "start": "npm run main-build && electron ./distMain/main/index.js",
     "start-dev": "cross-env NODE_ENV=dev npm run start",
     "build": "npm run clean && npm run renderer-build && npm run main-build",
-    "release-win": "npm run build && electron-builder --win --ia32 && shx rm -rf distApps/**/*-unpacked",
+    "build-win": "npm run build && electron-builder --win && shx rm -rf distApps/**/*-unpacked",
     "postinstall": "electron-builder install-app-deps"
   },
   "author": "Erwin G",

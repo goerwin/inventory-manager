@@ -21,9 +21,9 @@ jobs:
         with:
           node-version: 14
 
-      - name: Verify package.json version change
+      - id: check
+        name: Verify package.json version change
         uses: EndBug/version-check@v2
-        id: check
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
