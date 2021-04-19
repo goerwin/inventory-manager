@@ -31,30 +31,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: distApps
+          files: distApps/**/*
+          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
-      #   if: startsWith(github.ref, 'refs/tags/')
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - uses: ncipollo/release-action@v1
-      #   with:
-      #     artifacts: 'release.tar.gz,foo/*.txt'
-      #     bodyFile: 'body.md'
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Build/release Electron app
-      #   if: steps.check.outputs.changed == 'true'
-      #   uses: samuelmeuli/action-electron-builder@v1
-      #   with:
-      #     # GitHub token, automatically provided to the action
-      #     # (No need to define this secret in the repo settings)
-      #     github_token: ${{ secrets.github_token }}
-
-      #     # If the commit is tagged with a version (e.g. "v1.0.0"),
-      #     # release the app after building
-      #     release: ${{ startsWith(github.ref, 'refs/tags/v') }}
