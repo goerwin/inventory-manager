@@ -69,13 +69,16 @@
     "directories": {
       "output": "distApps/${os}_${productName}_${arch}"
     },
+    "files": [
+      "dist/**/*",
+      "distMain/**/*"
+    ],
+    "extraFiles": [
+      "env.example.txt"
+    ],
     "win": {
       "asar": true,
       "artifactName": "${productName}.${ext}",
-      "files": [
-        "dist**/*",
-        "distMain/**/*"
-      ],
       "target": [
         "portable"
       ]
