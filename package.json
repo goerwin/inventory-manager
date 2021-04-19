@@ -76,6 +76,10 @@
       {
         "from": "env.example.txt",
         "to": ".."
+      },
+      {
+        "from": "env.example.txt",
+        "to": "."
       }
     ],
     "win": {

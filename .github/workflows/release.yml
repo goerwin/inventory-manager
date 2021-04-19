@@ -1,6 +1,8 @@
 name: release
 
-on: push
+on:
+  push:
+    branches: [master]
 
 jobs:
   release:
@@ -12,14 +14,25 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: 14
 
+      - name: Verify package.json version change
+        uses: EndBug/version-check@v2
+        id: check
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: push new tag
+        if: steps.check.outputs.changed == 'true'
+        run: 'git tag v${{ steps.check.outputs.version }}'
+
       - name: Build/release Electron app
+        if: steps.check.outputs.changed == 'true'
         uses: samuelmeuli/action-electron-builder@v1
         with:
           # GitHub token, automatically provided to the action
