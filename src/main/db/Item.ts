@@ -11,26 +11,26 @@ import { Order } from './Order';
 @Entity()
 export class Item {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  description: string;
+  description!: string;
 
   @Column()
-  price: number;
+  price!: number;
 
   @Column()
-  availableUnits: number;
+  availableUnits!: number;
 
   @CreateDateColumn()
-  createdAt: string;
+  createdAt!: string;
 
   @UpdateDateColumn()
-  updatedAt: string;
+  updatedAt!: string;
 
   @OneToMany(() => Order, (order) => order.item)
-  orders: Order[];
+  orders!: Order[];
 }

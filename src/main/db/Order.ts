@@ -11,20 +11,20 @@ import { Item } from './Item';
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  quantity: number;
+  quantity!: number;
 
   @Column()
-  unitPrice: number;
+  unitPrice!: number;
 
   @CreateDateColumn()
-  createdAt: string;
+  createdAt!: string;
 
   @UpdateDateColumn()
-  updatedAt: string;
+  updatedAt!: string;
 
   @ManyToOne(() => Item, (item) => item.orders, { onDelete: 'CASCADE' })
-  item: Item;
+  item!: Item;
 }
