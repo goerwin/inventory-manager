@@ -46,7 +46,7 @@ ipcMain.handle('database-deleteItem', async (_, itemId) => {
   const connection = await connectionPromise;
   const repository = await connection.getRepository(Item);
   const item = await repository.findOne(itemId);
-  return repository.remove(item);
+  return repository.remove(item!);
 });
 
 ipcMain.handle('database-sellProduct', async (_, data) => {
@@ -55,12 +55,12 @@ ipcMain.handle('database-sellProduct', async (_, data) => {
   const itemRepository = await connection.getRepository(Item);
   const item = await itemRepository.findOne(itemId);
   const newOrder = new Order();
-  newOrder.item = item;
+  newOrder.item = item!;
   newOrder.unitPrice = price;
   newOrder.quantity = quantity;
   await connection.getRepository(Order).save(newOrder);
-  item.availableUnits = item.availableUnits - Number(quantity);
-  return itemRepository.save(item);
+  item!.availableUnits = item!.availableUnits - Number(quantity);
+  return itemRepository.save(item!);
 });
 
 ipcMain.handle('database-searchProduct', async (_, searchStr) => {

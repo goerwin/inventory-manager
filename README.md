@@ -20,5 +20,5 @@ $ npm install
 $ npm run start-dev
 
 # Runs the "renderer" side with webpack
-$ npm run start-dev
+$ npm run renderer-start-server-dev
 ```

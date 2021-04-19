@@ -2,9 +2,10 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 process.env.PORT = process.env.PORT || String(3000);
 console.log('ENVIRONMENT:', process.env.NODE_ENV);
 
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import 'reflect-metadata';
 import { INDEX_HTML_PATH, IS_PROD } from './config';
+import { sendDatabaseToRecipient } from './mailer';
 import './db';
 
 function createWindow() {
@@ -21,10 +22,20 @@ function createWindow() {
     },
   });
 
+  mainWindow.maximize();
   mainWindow.loadURL(INDEX_HTML_PATH);
 
   if (!IS_PROD) mainWindow.webContents.openDevTools();
 }
+
+// TODO: REFACTOR THIS
+ipcMain.handle('email-send-database', async (_) =>
+  sendDatabaseToRecipient().catch((e) => {
+    throw new Error(
+      `Probablemente debes crear el archivo env.txt. ${e.message}`
+    );
+  })
+);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

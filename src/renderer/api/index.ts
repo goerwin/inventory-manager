@@ -27,3 +27,7 @@ export function searchProducts(searchStr: string) {
 export function getOrders(filters?: { startDate?: Date; endDate?: Date }) {
   return ipcRenderer.invoke('database-getOrders', filters);
 }
+
+export function saveDatabase() {
+  return ipcRenderer.invoke('email-send-database');
+}

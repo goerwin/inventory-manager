@@ -1,22 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { useTable, useSortBy } from 'react-table';
+import { useForm } from 'react-hook-form';
+import NumberFormat from 'react-number-format';
+import { useMutation } from 'react-query';
+import { useSortBy, useTable } from 'react-table';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   addItem,
   deleteItem,
   editItem,
   getItems,
+  saveDatabase,
   searchProducts,
   sellProduct,
 } from '../api';
-import FormProductModal from './FormProductModal';
 import styles from './App.module.css';
-import { useForm } from 'react-hook-form';
-import SellProductModal from './SellProductModal';
-import NumberFormat from 'react-number-format';
+import FormProductModal from './FormProductModal';
 import OrdersModal from './OrdersModal';
+import SellProductModal from './SellProductModal';
 
 export default function App() {
-  const [formProduct, setFormProduct] = useState(null);
+  const { isLoading: databaseIsLoading, mutate: mutateDatabase } = useMutation(
+    () =>
+      saveDatabase()
+        .then((data) =>
+          toast.success(`Base de datos enviada a ${data.accepted.join(',')}`)
+        )
+        .catch((e) => toast.error(`Ocurrió un error. ${e.message}`))
+  );
+  const [formProduct, setFormProduct] = useState<any>(null);
   const [items, setItems] = useState<any[]>([]);
   const [productToSell, setProductToSell] = useState(null);
   const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false);
@@ -95,7 +107,7 @@ export default function App() {
     []
   );
 
-  const data = React.useMemo(() => items, [items]);
+  const tableData = React.useMemo(() => items, [items]);
 
   const {
     getTableProps,
@@ -104,7 +116,11 @@ export default function App() {
     rows,
     prepareRow,
   } = useTable(
-    { columns, data, initialState: { sortBy: [{ id: 'name', desc: false }] } },
+    {
+      columns,
+      data: tableData,
+      initialState: { sortBy: [{ id: 'name', desc: false }] },
+    },
     useSortBy // TODO: Sorting should be done serverside
   );
 
@@ -124,6 +140,9 @@ export default function App() {
         <div className={styles.topNavBtns}>
           <button onClick={() => setFormProduct({})}>Agregar producto</button>
           <button onClick={() => setIsOrdersModalOpen(true)}>Ver ventas</button>
+          <button onClick={() => mutateDatabase()} disabled={databaseIsLoading}>
+            {databaseIsLoading ? 'Enviando...' : 'Enviar base de datos'}
+          </button>
         </div>
       </div>
 
@@ -190,6 +209,8 @@ export default function App() {
         isOpen={isOrdersModalOpen}
         onRequestClose={() => setIsOrdersModalOpen(false)}
       />
+
+      <ToastContainer position="bottom-center" />
     </div>
   );
 }

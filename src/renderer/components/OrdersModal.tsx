@@ -12,6 +12,7 @@ import addMinutes from 'date-fns/fp/addMinutes';
 const gCurrDate = new Date();
 const gCurrTzOs = gCurrDate.getTimezoneOffset();
 const gEndDate = gCurrDate;
+
 export interface Props {
   isOpen: boolean;
   onRequestClose: () => void;
@@ -39,7 +40,7 @@ export default function OrdersModal({
 
     if (!range) return;
 
-    let startDate: string;
+    let startDate = '';
     let endDate = format('yyyy-MM-dd', gEndDate);
 
     if (range === 'today') {
@@ -48,8 +49,7 @@ export default function OrdersModal({
       startDate = format('yyyy-MM-dd', subDays(7, gEndDate));
     } else if (range === 'last30days') {
       startDate = format('yyyy-MM-dd', subDays(30, gEndDate));
-    } else if (range === 'all') {
-      startDate = '';
+    } else {
       endDate = '';
     }
 

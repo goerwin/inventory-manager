@@ -1,7 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import App from './components/App';
-import './index.css';
 import './fonts/icons/index.font';
+import './index.css';
 
-ReactDOM.render(<App />, document.getElementById('app'));
+const queryClient = new QueryClient();
+
+ReactDOM.render(
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>,
+  document.getElementById('app')
+);
