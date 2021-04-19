@@ -1,6 +1,6 @@
 {
   "name": "inventory-manager",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Inventory manager with Electron",
   "main": "./distMain/main/index.js",
   "scripts": {
@@ -13,9 +13,8 @@
     "main-build-dev": "cross-env NODE_ENV=dev npm run main-build",
     "start": "npm run main-build && electron ./distMain/main/index.js",
     "start-dev": "cross-env NODE_ENV=dev npm run start",
-    "app-build": "npm run clean && npm run renderer-build && npm run main-build",
-    "app-build-win": "npm run app-build && electron-builder --win --ia32 && electron-builder --win --x64",
-    "postapp-build-win": "shx rm -rf distApps/**/*-unpacked",
+    "build": "npm run clean && npm run renderer-build && npm run main-build",
+    "release-win": "npm run build && electron-builder --win --ia32 && shx rm -rf distApps/**/*-unpacked",
     "postinstall": "electron-builder install-app-deps"
   },
   "author": "Erwin G",
@@ -74,13 +73,21 @@
       "distMain/**/*"
     ],
     "extraFiles": [
-      "env.example.txt"
+      {
+        "from": "env.example.txt",
+        "to": ".."
+      }
     ],
     "win": {
       "asar": true,
       "artifactName": "${productName}.${ext}",
       "target": [
-        "portable"
+        {
+          "target": "portable",
+          "arch": [
+            "ia32"
+          ]
+        }
       ]
     }
   }
