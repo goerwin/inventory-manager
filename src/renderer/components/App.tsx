@@ -45,19 +45,22 @@ export default function App() {
   const handleAddEditProduct = async (item: any) => {
     if (item?.id) await editItem(item);
     else await addItem(item);
-
     await handleSetItems();
+    toast.success('Producto agregado/modificado');
   };
 
   const handleDeleteItem = async (item: any) => {
     if (confirm(`Seguro que quieres eliminar el producto ${item.name}?`)) {
       await deleteItem(item.id);
+      toast.success('Producto eliminado');
+
       return handleSetItems();
     }
   };
 
   const handleSellProduct = async (data: any) => {
     await sellProduct(data);
+    toast.success('Producto vendido');
     return handleSetItems();
   };
 
