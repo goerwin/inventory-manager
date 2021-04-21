@@ -44,7 +44,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
         with:
-          files: distApps/**/*
+          files: win.zip
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
