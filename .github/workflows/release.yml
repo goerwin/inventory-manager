@@ -1,6 +1,3 @@
-# NOTE: maybe useful for multiple os releases
-# https://github.com/actions/create-release/issues/14#issuecomment-555379810
-
 name: release
 
 on:
@@ -61,3 +58,5 @@ jobs:
           tag_name: v${{ steps.readPackageVersion.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# NOTE: maybe useful for multiple os releases
+# https://github.com/actions/create-release/issues/14#issuecomment-555379810
