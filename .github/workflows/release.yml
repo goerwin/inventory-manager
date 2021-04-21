@@ -26,9 +26,6 @@ jobs:
         uses: tyankatsu0105/read-package-version-actions@v1
         id: readPackageVersion
 
-      - name: Show version number
-        run: echo "Version is ${{ steps.readPackageVersion.outputs.version }}"
-
       - name: Verify if a tag exists for package.json version
         uses: mukunku/tag-exists-action@v1.0.0
         id: tagExists
@@ -37,7 +34,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create tag if it does not exist
+      - name: Create new tag if it does not exist
         if: steps.tagExists.outputs.exists == 'false'
         id: stepVerifyNewTag
         run: |
@@ -47,61 +44,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: tag created
-        if: steps.stepVerifyNewTag.outputs.tagCreated == 'true'
-        run: echo 'tag created'
-
-      - name: tag not created
-        if: steps.stepVerifyNewTag.outputs.tagCreated != 'true'
-        run: echo 'tag not created'
-
-      - name: Build for windows if tag was just created
+      - name: Build for windows if new tag created
         if: steps.stepVerifyNewTag.outputs.tagCreated == 'true'
         run: |
           npm install
           npm run build-win
 
-      - name: Release if tag was just created
-        uses: softprops/action-gh-release@v1
+      - name: Release if new tag created
+        uses: softprops/action-gh-release@master
         if: steps.stepVerifyNewTag.outputs.tagCreated == 'true'
         with:
           files: win.zip
+          tag_name: v${{ steps.readPackageVersion.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Check package.json version update
-      #   uses: EndBug/version-check@v1.1.0
-      #   id: check
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Log when changed
-      #   if: steps.check.outputs.changed == 'true'
-      #   run: 'echo "Version change found in commit ${{ steps.check.outputs.commit }}! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
-
-      # - name: Log when unchanged
-      #   if: steps.check.outputs.changed == 'false'
-      #   run: 'echo "No version change :/"'
-
-      # - name: Windows build
-      #   if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
-      #   run: |
-      #     npm install
-      #     npm run build-win
-
-      # - run: echo ${{ steps.checkTag.outputs.exists }}
-
-      # - name: Create tag for release
-      #   if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
-      #   run: |
-      #     git tag v${{ steps.check.outputs.version }}
-      #     git push origin v${{ steps.check.outputs.version }}
-
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
-      #   if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
-      #   with:
-      #     files: win.zip
-      #     fail_on_unmatched_files: true
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
