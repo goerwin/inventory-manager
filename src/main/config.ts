@@ -7,10 +7,11 @@ export const DB_NAME = 'database.sqlite3';
 
 export const IS_PROD = process.env.NODE_ENV === 'production';
 
+const rootFolder = path.resolve(__dirname, '../../');
 export const EXE_PATH = IS_PROD
-  ? path.resolve(process.env.PORTABLE_EXECUTABLE_DIR!) // portable.exe dir
+  ? path.resolve(process.env.PORTABLE_EXECUTABLE_DIR! || rootFolder) // portable.exe dir
   : // ? path.resolve(process.execPath) // unpacked version
-    path.resolve(__dirname, '../../'); // in development, is the root folder
+    rootFolder; // in development, is the root folder
 
 export const DATABASE_PATH = path.resolve(EXE_PATH, DB_NAME);
 

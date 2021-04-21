@@ -2,19 +2,19 @@
   "name": "inventory-manager",
   "version": "2.1.0",
   "description": "Inventory manager with Electron",
-  "main": "./distMain/main/index.js",
+  "main": "distMain/src/main/index.js",
   "scripts": {
     "clean": "shx rm -rf dist && shx rm -rf distMain && shx rm -rf distApps",
     "renderer-build": "webpack --config ./webpack.config.js",
     "renderer-build-dev": "cross-env NODE_ENV=dev npm run renderer-build",
-    "renderer-start-server": "webpack serve --config ./webpack.config.js",
-    "renderer-start-server-dev": "cross-env NODE_ENV=dev npm run renderer-start-server",
+    "renderer-start": "webpack serve --config ./webpack.config.js",
+    "renderer-start-dev": "cross-env NODE_ENV=dev npm run renderer-start",
     "main-build": "tsc",
     "main-build-dev": "cross-env NODE_ENV=dev npm run main-build",
-    "start": "npm run main-build && electron ./distMain/main/index.js",
+    "start": "npm run main-build && electron distMain/src/main/index.js",
     "start-dev": "cross-env NODE_ENV=dev npm run start",
     "build": "npm run clean && npm run renderer-build && npm run main-build",
-    "build-win": "npm run build && electron-builder --win && shx rm -rf distApps/**/*-unpacked",
+    "build-win": "npm run build && electron-builder --win && shx rm -rf distApps/**/*-unpacked && cd distApps/ && bestzip ../win.zip *",
     "postinstall": "electron-builder install-app-deps"
   },
   "author": "Erwin G",
@@ -22,6 +22,7 @@
     "@types/nodemailer": "^6.4.1",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
+    "bestzip": "^2.2.0",
     "compression-webpack-plugin": "^7.1.2",
     "css-loader": "^5.2.2",
     "electron": "^12.0.4",
@@ -64,7 +65,7 @@
     "productName": "Inventario",
     "copyright": "Copyright © 2021 ${author}",
     "directories": {
-      "output": "distApps/${os}_${productName}_${arch}"
+      "output": "distApps/${productName}-v${version}-${os}-${arch}"
     },
     "files": [
       "dist/**/*",
@@ -78,7 +79,7 @@
     ],
     "win": {
       "asar": true,
-      "artifactName": "${productName}.${ext}",
+      "artifactName": "${productName}-v${version}-${os}-ia32.${ext}",
       "target": [
         {
           "target": "portable",

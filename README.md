@@ -16,9 +16,9 @@ It uses Sqlite3 for the Database.
 ```sh
 $ npm install
 
-# Runs the "main" side with electron
+# Run the "main" side with electron
 $ npm run start-dev
 
-# Runs the "renderer" side with webpack
-$ npm run renderer-start-server-dev
+# Run the "renderer" side with webpack
+$ npm run renderer-start-dev
 ```

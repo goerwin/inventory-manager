@@ -3,3 +3,4 @@ dist
 distMain
 distApps
 env.txt
+*.zip

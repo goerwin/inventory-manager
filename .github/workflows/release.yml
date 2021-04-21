@@ -2,8 +2,8 @@ name: release
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - master
 
 jobs:
   build:
@@ -22,14 +22,27 @@ jobs:
         with:
           node-version: 14
 
+      - name: Check package.json version update
+        uses: EndBug/version-check@v1.1.0
+        id: check
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Windows build
-        if: matrix.os == 'windows-latest'
+        if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
         run: |
           npm install
           npm run build-win
 
+      - name: Create tag for release
+        if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
+        run: |
+          git tag v${{ steps.check.outputs.version }}
+          git push origin v${{ steps.check.outputs.version }}
+
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
         with:
           files: distApps/**/*
           fail_on_unmatched_files: true

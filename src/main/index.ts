@@ -6,6 +6,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import 'reflect-metadata';
 import { INDEX_HTML_PATH, IS_PROD } from './config';
 import { sendDatabaseToRecipient } from './mailer';
+import { version } from '../../package.json';
 import './db';
 
 function createWindow() {
@@ -15,7 +16,7 @@ function createWindow() {
     minHeight: 450,
     height: 600,
     width: 1200,
-    title: 'Inventario',
+    title: `Inventario v${version}`,
     backgroundColor: 'black',
     webPreferences: {
       nodeIntegration: true,
