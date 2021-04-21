@@ -5,6 +5,7 @@ import { useMutation } from 'react-query';
 import { useSortBy, useTable } from 'react-table';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2';
 import {
   addItem,
   deleteItem,
@@ -50,7 +51,15 @@ export default function App() {
   };
 
   const handleDeleteItem = async (item: any) => {
-    if (confirm(`Seguro que quieres eliminar el producto ${item.name}?`)) {
+    const result = await Swal.fire({
+      title: `Seguro que quieres eliminar el producto ${item.name}?`,
+      showCancelButton: true,
+      focusCancel: true,
+      confirmButtonText: `Aceptar`,
+      cancelButtonText: 'Cancelar',
+    });
+
+    if (result.isConfirmed) {
       await deleteItem(item.id);
       toast.success('Producto eliminado');
 

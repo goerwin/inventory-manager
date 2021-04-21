@@ -1,3 +1,6 @@
+# NOTE: maybe useful for multi os releases
+# https://github.com/actions/create-release/issues/14#issuecomment-555379810
+
 name: release
 
 on:

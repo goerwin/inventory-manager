@@ -4,10 +4,10 @@ console.log('ENVIRONMENT:', process.env.NODE_ENV);
 
 import { app, BrowserWindow, ipcMain } from 'electron';
 import 'reflect-metadata';
-import { INDEX_HTML_PATH, IS_PROD } from './config';
-import { sendDatabaseToRecipient } from './mailer';
 import { version } from '../../package.json';
+import { INDEX_HTML_PATH, IS_PROD } from './config';
 import './db';
+import { sendDatabaseToRecipient } from './mailer';
 
 function createWindow() {
   // Create the browser window.
