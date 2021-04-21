@@ -22,29 +22,86 @@ jobs:
         with:
           node-version: 14
 
-      - name: Check package.json version update
-        uses: EndBug/version-check@v1.1.0
-        id: check
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get package.json version
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: readPackageVersion
 
-      - name: Windows build
-        if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
+      - name: Show version number
+        run: echo "Version is ${{ steps.readPackageVersion.outputs.version }}"
+
+      - name: Verify if a tag exists for package.json version
+        uses: mukunku/tag-exists-action@v1.0.0
+        id: tagExists
+        with:
+          tag: 'v${{ steps.readPackageVersion.outputs.version }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create tag if it does not exist
+        if: steps.tagExists.outputs.exists == 'false'
+        id: stepVerifyNewTag
+        run: |
+          git tag v${{ steps.readPackageVersion.outputs.version }}
+          git push origin v${{ steps.readPackageVersion.outputs.version }}
+          echo '::set-output name=tagCreated::true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: tag created
+        if: steps.stepVerifyNewTag.outputs.tagCreated == 'true'
+        run: echo 'tag created'
+
+      - name: tag not created
+        if: steps.stepVerifyNewTag.outputs.tagCreated != 'true'
+        run: echo 'tag not created'
+
+      - name: Build for windows if tag was just created
+        if: steps.stepVerifyNewTag.outputs.tagCreated == 'true'
         run: |
           npm install
           npm run build-win
 
-      - name: Create tag for release
-        if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
-        run: |
-          git tag v${{ steps.check.outputs.version }}
-          git push origin v${{ steps.check.outputs.version }}
-
-      - name: Release
+      - name: Release if tag was just created
         uses: softprops/action-gh-release@v1
-        if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
+        if: steps.stepVerifyNewTag.outputs.tagCreated == 'true'
         with:
           files: win.zip
-          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Check package.json version update
+      #   uses: EndBug/version-check@v1.1.0
+      #   id: check
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Log when changed
+      #   if: steps.check.outputs.changed == 'true'
+      #   run: 'echo "Version change found in commit ${{ steps.check.outputs.commit }}! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
+
+      # - name: Log when unchanged
+      #   if: steps.check.outputs.changed == 'false'
+      #   run: 'echo "No version change :/"'
+
+      # - name: Windows build
+      #   if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
+      #   run: |
+      #     npm install
+      #     npm run build-win
+
+      # - run: echo ${{ steps.checkTag.outputs.exists }}
+
+      # - name: Create tag for release
+      #   if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
+      #   run: |
+      #     git tag v${{ steps.check.outputs.version }}
+      #     git push origin v${{ steps.check.outputs.version }}
+
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   if: steps.check.outputs.changed == 'true' && matrix.os == 'windows-latest'
+      #   with:
+      #     files: win.zip
+      #     fail_on_unmatched_files: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
