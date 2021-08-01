@@ -1,3 +1,4 @@
+import os from 'os';
 import { app } from 'electron';
 import path from 'path';
 import url from 'url';
@@ -7,9 +8,15 @@ export const DB_NAME = 'database.sqlite3';
 
 export const IS_PROD = process.env.NODE_ENV === 'production';
 
+const isMac = os.platform() === 'darwin';
+
+const macPath = isMac ? path.resolve(app.getPath('exe'), '../../../../') : '';
 const rootFolder = path.resolve(__dirname, '../../');
+
 export const EXE_PATH = IS_PROD
-  ? path.resolve(process.env.PORTABLE_EXECUTABLE_DIR! || rootFolder) // portable.exe dir
+  ? isMac
+    ? macPath
+    : path.resolve(process.env.PORTABLE_EXECUTABLE_DIR! || rootFolder) // portable.exe dir
   : // ? path.resolve(process.execPath) // unpacked version
     rootFolder; // in development, is the root folder
 

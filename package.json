@@ -3,6 +3,9 @@
   "version": "2.5.0",
   "description": "Inventory manager with Electron",
   "main": "distMain/src/main/index.js",
+  "engines": {
+    "node": "15"
+  },
   "scripts": {
     "clean": "shx rm -rf dist && shx rm -rf distMain && shx rm -rf distApps",
     "renderer-build": "webpack --config ./webpack.config.js",
@@ -15,6 +18,7 @@
     "start-dev": "cross-env NODE_ENV=dev npm run start",
     "build": "npm run clean && npm run renderer-build && npm run main-build",
     "build-win": "npm run build && electron-builder --win && shx rm -rf distApps/**/*-unpacked && cd distApps/ && bestzip ../win.zip *",
+    "build-mac": "npm run build && electron-builder --mac",
     "postinstall": "electron-builder install-app-deps"
   },
   "author": "Erwin G",
@@ -78,6 +82,16 @@
         "to": ".."
       }
     ],
+    "mac": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
     "win": {
       "asar": true,
       "artifactName": "${productName}-v${version}-${os}-ia32.${ext}",
