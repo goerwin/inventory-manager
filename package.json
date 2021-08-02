@@ -79,10 +79,7 @@
     "mac": {
       "target": [
         {
-          "target": "zip",
-          "arch": [
-            "x64"
-          ]
+          "target": "pkg"
         }
       ]
     },
