@@ -76,12 +76,6 @@
       "dist/**/*",
       "distMain/**/*"
     ],
-    "extraFiles": [
-      {
-        "from": "env.example.txt",
-        "to": ".."
-      }
-    ],
     "mac": {
       "target": [
         {
@@ -95,6 +89,12 @@
     "win": {
       "asar": true,
       "artifactName": "${productName}-v${version}-${os}-ia32.${ext}",
+      "extraFiles": [
+        {
+          "from": "env.example.txt",
+          "to": ".."
+        }
+      ],
       "target": [
         {
           "target": "portable",
